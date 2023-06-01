@@ -10,14 +10,21 @@ const refs = {
   startBtn: document.querySelector('[data-start]'),
 };
 refs.startBtn.disabled = true;
-
+let selectedDate;
 const options = {
   enableTime: true,
   time_24hr: true,
   defaultDate: new Date(),
   minuteIncrement: 1,
+
   onClose(selectedDates) {
+   selectedDate = selectedDates[0];
+    if (selectedDate <= Date.now()){
+      return alert ('"Please choose a date in the future"')
+    }
+
     refs.startBtn.disabled = false;
+
     refs.startBtn.addEventListener('click', () => {
       countDownTimer.start();
     });
@@ -35,10 +42,6 @@ const options = {
     };
   },
 };
-
-// if (deltaTime < 0) {
-//   window.alert ('"Please choose a date in the future"'),
-//   refs.startBtn.disabled = true;
 
 flatpickr(inputEl, options);
 
