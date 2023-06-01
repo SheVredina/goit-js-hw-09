@@ -16,3 +16,10 @@ img {
   display: block;
   max-width: 100%;
 }
+span {
+  font-size: 18px;
+}
+
+.timer {
+  display: flex;
+}
