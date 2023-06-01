@@ -1,18 +1,6 @@
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 const inputEl = document.getElementById('datetime-picker');
-const options = {
-  enableTime: true,
-  time_24hr: true,
-  defaultDate: new Date(),
-  minuteIncrement: 1,
-  onClose(selectedDates) {
-    console.log(selectedDates[0]);
-  },
-};
-
-flatpickr(inputEl, options);
-
 const refs = {
   daysEl: document.querySelector('[data-days]'),
   hoursEl: document.querySelector('[data-hours]'),
@@ -21,23 +9,33 @@ const refs = {
   startBtn: document.querySelector('[data-start]')
 };
 
-const countDownTimer = {
-  start() {
-    const startTime = Date.now();
+const options = {
+  enableTime: true,
+  time_24hr: true,
+  defaultDate: new Date(),
+  minuteIncrement: 1,
+  onClose(selectedDates) {
+    refs.startBtn.addEventListener('click', () =>{
+      countDownTimer.start();
+    })
 
-    setInterval(() => {
-      const currentTime = Date.now();
-    console.log(currentTime);
-      const deltaTime = currentTime - startTime;
-const time = convertMs(deltaTime);
-updateClockface(time);
-    }, 1000);
+    const countDownTimer = {
+      start() {
+        const startTime = new Date(selectedDates);
+    
+        setInterval(() => {
+          const currentTime = Date.now();
+          const deltaTime = startTime - currentTime;
+    const time = convertMs(deltaTime);
+    updateClockface(time);
+        }, 1000);
+      },
+    }
   },
+  
 };
 
-refs.startBtn.addEventListener('click', () =>{
-  countDownTimer.start();
-})
+flatpickr(inputEl, options);
 
 function convertMs(deltaTime) {
   const second = 1000;
