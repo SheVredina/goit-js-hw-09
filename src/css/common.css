@@ -19,7 +19,15 @@ img {
 span {
   font-size: 18px;
 }
+.field {
+display: grid;
+justify-items: center;
+}
 
 .timer {
   display: flex;
+  gap: 10px;
+}
+.label {
+  font-size: 12px;
 }

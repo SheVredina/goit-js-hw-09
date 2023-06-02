@@ -1,5 +1,7 @@
 import flatpickr from 'flatpickr';
+
 import 'flatpickr/dist/flatpickr.min.css';
+
 const inputEl = document.getElementById('datetime-picker');
 
 const refs = {
@@ -8,7 +10,9 @@ const refs = {
   minutesEl: document.querySelector('[data-minutes]'),
   secondsEl: document.querySelector('[data-seconds]'),
   startBtn: document.querySelector('[data-start]'),
+  timerElement: document.querySelector('.timer')
 };
+
 refs.startBtn.disabled = true;
 let selectedDate;
 const options = {
@@ -28,15 +32,20 @@ const options = {
     refs.startBtn.addEventListener('click', () => {
       countDownTimer.start();
     });
+
     const countDownTimer = {
       start() {
         const startTime = new Date(selectedDates);
 
-        setInterval(() => {
+       let timer = setInterval(() => {
           const currentTime = Date.now();
           const deltaTime = startTime - currentTime;
           const time = convertMs(deltaTime);
           updateClockface(time);
+          if (deltaTime < 0) {
+            clearInterval(timer);
+            refs.timerElement.innerHTML = "Час вийшов!";
+          }
         }, 1000);
       },
     };
