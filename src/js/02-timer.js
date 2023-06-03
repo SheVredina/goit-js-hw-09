@@ -1,19 +1,18 @@
 import flatpickr from 'flatpickr';
 
 import 'flatpickr/dist/flatpickr.min.css';
-
-const inputEl = document.getElementById('datetime-picker');
+import Notiflix from 'notiflix';
 
 const refs = {
+  inputEl: document.getElementById('datetime-picker'),
   daysEl: document.querySelector('[data-days]'),
   hoursEl: document.querySelector('[data-hours]'),
   minutesEl: document.querySelector('[data-minutes]'),
   secondsEl: document.querySelector('[data-seconds]'),
   startBtn: document.querySelector('[data-start]'),
-  timerElement: document.querySelector('.timer')
+  timerElement: document.querySelector('.timer'),
 };
 
-refs.startBtn.disabled = true;
 let selectedDate;
 const options = {
   enableTime: true,
@@ -22,37 +21,38 @@ const options = {
   minuteIncrement: 1,
 
   onClose(selectedDates) {
-   selectedDate = selectedDates[0];
-    if (selectedDate <= Date.now()){
-      return alert ('"Please choose a date in the future"')
+    selectedDate = selectedDates[0];
+    if (selectedDate <= Date.now()) {
+      return Notiflix.Report.success('Please choose a date in the future');
     }
-
-    refs.startBtn.disabled = false;
-
-    refs.startBtn.addEventListener('click', () => {
-      countDownTimer.start();
-    });
-
-    const countDownTimer = {
-      start() {
-        const startTime = new Date(selectedDates);
-
-       let timer = setInterval(() => {
-          const currentTime = Date.now();
-          const deltaTime = startTime - currentTime;
-          const time = convertMs(deltaTime);
-          updateClockface(time);
-          if (deltaTime < 0) {
-            clearInterval(timer);
-            refs.timerElement.innerHTML = "Час вийшов!";
-          }
-        }, 1000);
-      },
-    };
   },
 };
 
-flatpickr(inputEl, options);
+refs.startBtn.addEventListener('click', () => {
+  countDownTimer.start();
+});
+
+const countDownTimer = {
+  start() {
+    refs.startBtn.disabled = true;
+    refs.inputEl.disabled = true;
+
+    const startTime = new Date(selectedDate);
+
+    let timer = setInterval(() => {
+      const currentTime = Date.now();
+      const deltaTime = startTime - currentTime;
+      const time = convertMs(deltaTime);
+      updateClockface(time);
+      if (deltaTime < 0) {
+        clearInterval(timer);
+        refs.timerElement.innerHTML = 'Час вийшов!';
+      }
+    }, 1000);
+  },
+};
+
+flatpickr(refs.inputEl, options);
 
 function convertMs(deltaTime) {
   const second = 1000;

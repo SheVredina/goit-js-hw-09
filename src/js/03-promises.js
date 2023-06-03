@@ -7,9 +7,9 @@ formEl.addEventListener('submit', onSubmitBtn);
 function onSubmitBtn(event) {
   event.preventDefault();
 
-  const delayInput = formEl.querySelector('input[name="delay"]');
-  const stepInput = formEl.querySelector('input[name="step"]');
-  const amountInput = formEl.querySelector('input[name="amount"]');
+  const delayInput = this.elements.delay;
+  const stepInput = this.elements.step; 
+  const amountInput = this.elements.amount;
   const delay = parseInt(delayInput.value);
   const step = parseInt(stepInput.value);
   const amount = parseInt(amountInput.value);
@@ -18,10 +18,14 @@ function onSubmitBtn(event) {
     const position = i + 1;
     createPromise(position, delay + step * i)
       .then(({ position, delay }) => {
-        Notiflix.Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`);
+        Notiflix.Notify.success(
+          `✅ Fulfilled promise ${position} in ${delay}ms`
+        );
       })
       .catch(({ position, delay }) => {
-        Notiflix.Notify.success(`❌ Rejected promise ${position} in ${delay}ms`);
+        Notiflix.Notify.success(
+          `❌ Rejected promise ${position} in ${delay}ms`
+        );
       });
   }
   delayInput.value = '';
